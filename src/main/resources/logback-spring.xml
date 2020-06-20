@@ -1,60 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-	<!--
-	  log levels can be changed at runtime using spring boot actuator 
-	  https://www.baeldung.com/spring-boot-changing-log-level-at-runtime
-	  -->
-	<include resource="org/springframework/boot/logging/logback/defaults.xml" />
-	<property name="log.path" value="log"/>
-    <property name="log.filename.prefix" value="appLog"/>
+	<!-- log levels can be changed at runtime using spring boot actuator https://www.baeldung.com/spring-boot-changing-log-level-at-runtime -->
+	<include
+		resource="org/springframework/boot/logging/logback/defaults.xml" />
+	<property name="log.path" value="log" />
+	<property name="log.filename.prefix" value="appLog" />
 
-	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <Pattern>
-                %d{yyyy-MM-dd HH:mm:ss.SSS} || [%thread] || %-5level || %logger{36} || %msg%n
-            </Pattern>
-        </layout>
-    </appender>
-    
-    <appender name="FILE-ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${log.path}/${log.filename.prefix}.log</file>
+	<appender name="CONSOLE"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>
+				%d{yyyy-MM-dd HH:mm:ss.SSS} || [%thread] || %-5level || %logger{36} || %msg%n
+			</Pattern>
+		</layout>
+	</appender>
 
-        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${log.path}/archive/year_%d{yyyy, aux}/month_%d{MM, aux}/${log.filename.prefix}.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
-            <!-- each archived file, size max 10MB -->
-            <maxFileSize>10MB</maxFileSize>
-            <!-- total size of all archive files, if total size > 10GB, it will delete old archived file -->
-            <totalSizeCap>10GB</totalSizeCap>
-            <!-- 3653 days (10 years) to keep -->
-            <maxHistory>3653</maxHistory>
-        </rollingPolicy>
+	<appender name="FILE-ROLLING"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${log.path}/${log.filename.prefix}.log</file>
 
-        <encoder>
-            <pattern>%d || [%t] || %p || %c{1.} || %m%n</pattern>
-        </encoder>
-    </appender>
-  
-  <springProfile name="local | dev">
-    <logger name="org.springframework" level="DEBUG" additivity="false">
-        <appender-ref ref="CONSOLE" />
-    </logger>
-    <root level="DEBUG">
-      <appender-ref ref="CONSOLE" />
-      <appender-ref ref="FILE-ROLLING" />
-    </root>
-  </springProfile>
- 
-  <springProfile name="prod">
-    <root level="INFO">
-      <appender-ref ref="FILE-ROLLING" />
-    </root>
-  </springProfile>
- 
-  <springProfile name="!local and !dev and !prod">
-    <root level="DEBUG">
-      <appender-ref ref="CONSOLE" />
-      <appender-ref ref="FILE-ROLLING" />
-    </root>
-  </springProfile>
-  
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${log.path}/archive/year_%d{yyyy, aux}/month_%d{MM,
+				aux}/${log.filename.prefix}.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+			<!-- each archived file, size max 10MB -->
+			<maxFileSize>10MB</maxFileSize>
+			<!-- total size of all archive files, if total size > 10GB, it will delete 
+				old archived file -->
+			<totalSizeCap>10GB</totalSizeCap>
+			<!-- 3653 days (10 years) to keep -->
+			<maxHistory>3653</maxHistory>
+		</rollingPolicy>
+
+		<encoder>
+			<pattern>%d || [%t] || %p || %c{1.} || %m%n</pattern>
+		</encoder>
+	</appender>
+
+	<springProfile name="local | dev">
+		<logger name="org.springframework" level="DEBUG"
+			additivity="false">
+			<appender-ref ref="CONSOLE" />
+		</logger>
+		<root level="DEBUG">
+			<appender-ref ref="CONSOLE" />
+			<appender-ref ref="FILE-ROLLING" />
+		</root>
+	</springProfile>
+
+	<springProfile name="prod">
+		<root level="WARN">
+			<appender-ref ref="CONSOLE" />
+			<appender-ref ref="FILE-ROLLING" />
+		</root>
+	</springProfile>
+
+	<springProfile name="!local &amp; !dev &amp; !prod">
+		<root level="DEBUG">
+			<appender-ref ref="CONSOLE" />
+			<appender-ref ref="FILE-ROLLING" />
+		</root>
+	</springProfile>
+
 </configuration>
