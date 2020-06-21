@@ -38,10 +38,6 @@
 	</appender>
 
 	<springProfile name="local | dev">
-		<logger name="org.springframework" level="DEBUG"
-			additivity="false">
-			<appender-ref ref="CONSOLE" />
-		</logger>
 		<root level="DEBUG">
 			<appender-ref ref="CONSOLE" />
 			<appender-ref ref="FILE-ROLLING" />
